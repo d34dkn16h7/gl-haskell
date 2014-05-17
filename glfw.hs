@@ -34,7 +34,8 @@ run mw = do
 
 render = do
   GL.clear [GL.ColorBuffer, GL.DepthBuffer]
-  GL.renderPrimitive GL.Points $ do
+  GL.renderPrimitive GL.Lines $ do
     GL.vertex $ GL.Vertex2 (-0.5 :: GLfloat) (0.0 :: GLfloat)
     GL.vertex $ GL.Vertex2 (0.0 :: GLfloat) (0.0 :: GLfloat)
     GL.vertex $ GL.Vertex2 (0.5 :: GLfloat) (0.0 :: GLfloat)
+    GL.vertex $ GL.Vertex2 (0.5 :: GLfloat) (0.5 :: GLfloat)
