@@ -4,13 +4,17 @@ import Graphics.Rendering.OpenGL as GL
 import qualified Graphics.UI.GLFW as GLFW
 
 {- data stuff -}
-data V2 = V2 { x :: GLfloat, y :: GLfloat}
-data Camera = Camera {pos :: V2}
+data V2 = V2 { _x :: GLfloat, _y :: GLfloat}
+data Camera = Camera {_pos :: V2}
 data GameWorld = GameWorld { win :: GLFW.Window , cam :: Camera }
+data Input = Input { left :: GLFW.KeyState , right :: GLFW.KeyState , up :: GLFW.KeyState , down :: GLFW.KeyState}
 
-gX' (Camera p) = x p
-gY' (Camera p) = y p
-gV2 Camera {pos = p} = p
+
+gX' (Camera p) = _x p
+gY' (Camera p) = _y p
+
+gV2 :: Camera -> V2
+gV2 c = _pos c
 
 main = do
   GLFW.init
@@ -40,17 +44,22 @@ run mw world = do
   wsClose <- GLFW.windowShouldClose mw
   runIfTrue esc wsClose GLFW.terminate (run mw world)
 
-gInput :: GameWorld -> IO GameWorld
-gInput GameWorld {win = m_win , cam = m_cam} = do
+uInput m_win = do
   left  <- GLFW.getKey m_win GLFW.Key'Left
   right <- GLFW.getKey m_win GLFW.Key'Right
   up    <- GLFW.getKey m_win GLFW.Key'Up
   down  <- GLFW.getKey m_win GLFW.Key'Down
+  return $ Input left right up down
+
+gInput :: GameWorld -> IO GameWorld
+gInput GameWorld {win = m_win , cam = m_cam} = do
+  input <- uInput m_win
   let x = gX' m_cam
   let y = gY' m_cam
-  let nX = if left == GLFW.KeyState'Pressed then x - 0.001 else if right == GLFW.KeyState'Pressed then x + 0.001 else x 
-  let nY = if down == GLFW.KeyState'Pressed then y - 0.001 else if up == GLFW.KeyState'Pressed then y + 0.001 else y 
+  let nX = if (left input) == GLFW.KeyState'Pressed then x + 0.001 else if (right input) == GLFW.KeyState'Pressed then x - 0.001 else x 
+  let nY = if (down input) == GLFW.KeyState'Pressed then y + 0.001 else if (up input) == GLFW.KeyState'Pressed then y - 0.001 else y 
   return  (GameWorld m_win $ (Camera $ V2 nX nY))
+  where
 
 render :: Camera -> IO ()
 render camera = do
