@@ -3,6 +3,7 @@ module Input where
 import qualified Graphics.UI.GLFW as GLFW
 import Data
 
+uInput :: GLFW.Window -> IO Input
 uInput m_win = do
   left  <- GLFW.getKey m_win GLFW.Key'Left
   right <- GLFW.getKey m_win GLFW.Key'Right

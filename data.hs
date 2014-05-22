@@ -8,8 +8,8 @@ data Vec2 = Vec2 { _x :: GLfloat, _y :: GLfloat}
 data Camera = Camera {_pos :: Vec2}
 data GameWorld = GameWorld { win :: GLFW.Window , cam :: Camera }
 
-gX' (Camera p) = _x p
-gY' (Camera p) = _y p
+gX' :: Camera -> GLfloat
+gX' cam = _x $ _pos cam
 
-gVec2 :: Camera -> Vec2
-gVec2 c = _pos c
+gY' :: Camera -> GLfloat
+gY' cam = _y $ _pos cam
