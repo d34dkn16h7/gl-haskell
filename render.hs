@@ -1,22 +1,20 @@
 module Render where
 
-import System.Exit
 import Graphics.Rendering.OpenGL as GL
 import qualified Graphics.UI.GLFW as GLFW
 
 import Data
 
-init :: (GLFW.Window -> GameWorld -> IO a) -> IO a
-init rn = do
-  mw <- GLFW.createWindow 700 500 "(opengl | haskell) -> YAY!!" Nothing Nothing
+init :: Int -> Int -> ((GLFW.Window,GameWorld) -> IO a) -> IO a -> IO a
+init w h rn err = do
+  mw <- GLFW.createWindow w h "(opengl | haskell) -> YAY!!" Nothing Nothing
   case mw of
-    Nothing -> do
-          print "Can't create window"
-          exitWith (ExitFailure 0)
+    Nothing ->
+    	  err
     Just m  -> do
           GLFW.makeContextCurrent mw
           GL.clearColor $= Color4 1 0 0 0
-          rn m (GameWorld m $ (Camera $ Vec2 0 0))
+          rn (m , GameWorld m $ Camera $ Vec2 0 0)
 
 update :: Camera -> IO ()
 update camera = do
