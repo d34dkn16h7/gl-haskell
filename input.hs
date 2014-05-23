@@ -18,4 +18,4 @@ update GameWorld {win = m_win , cam = m_cam} = do
   let y = gY' m_cam
   let nX = if (left _input) == GLFW.KeyState'Pressed then x + 0.001 else if (right _input) == GLFW.KeyState'Pressed then x - 0.001 else x 
   let nY = if (down _input) == GLFW.KeyState'Pressed then y + 0.001 else if (up _input) == GLFW.KeyState'Pressed then y - 0.001 else y 
-  return  (GameWorld m_win $ (Camera $ Vec2 nX nY))
+  return  (GameWorld m_win $ (Camera (Vec2 nX nY) (_screen m_cam)))
