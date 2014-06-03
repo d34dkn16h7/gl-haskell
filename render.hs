@@ -25,20 +25,22 @@ update camera = do
 
 draw :: Camera -> IO ()
 draw cam = do
-  let _scr = _screen cam
-  let ratio = _y _scr / _x _scr
-  print ratio
-  renderQuad ratio (Vec2 1 0) (Vec2 1 1)
-  renderQuad ratio (Vec2 (-1) 0) (Vec2 0.2 0.2)
+  renderQuad (Vec2 1 0) (Vec2 1 1)
+  renderQuad (Vec2 (-1) 0) (Vec2 0.2 0.2)
 
-renderQuad :: GLfloat -> Vec2 -> Vec2 -> IO ()
-renderQuad ratio (Vec2 x y) (Vec2 sx sy) = do
-    GL.color $ Color4 1 1 1 (1 :: GLfloat)
-    glVertex2 ((-0.5 + x) * sx * ratio) ((-0.5 + y) * sy * ratio) 
-    glVertex2 ((-0.5 + x) * sx * ratio) ((0.5 + y) * sy * ratio)
-    GL.color $ Color4 0.5 0.5 0.5 (0.5 :: GLfloat)
-    glVertex2 ((0.5 + x) * sx * ratio) ((0.5 + y) * sy * ratio)
-    glVertex2 ((0.5 + x) * sx * ratio) ((-0.5 + y) * sy * ratio)
+renderQuad :: Vec2 -> Vec2 -> IO ()
+renderQuad (Vec2 x y) (Vec2 sx sy) = do
+    glColor 1 1 1
+    glVertex2 ((-0.5 + x) * sx) ((-0.5 + y) * sy) 
+    glVertex2 ((-0.5 + x) * sx) ((0.5 + y) * sy)
+    glColor 1 0.3 0.3
+    glVertex2 ((0.5 + x) * sx) ((0.5 + y) * sy)
+    glVertex2 ((0.5 + x) * sx) ((-0.5 + y) * sy)
+
+-- For easy of use
+
+glColor :: GLfloat -> GLfloat -> GLfloat -> IO ()
+glColor r g b = GL.color $ Color4 r g b 1.0
 
 glVertex2 :: GLfloat -> GLfloat -> IO ()
 glVertex2 x y = glVertex3 x y 0
